@@ -1,0 +1,66 @@
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<svg id="Barchart" width="600" height="400">
+    <!-- The histogram will be drawn here -->
+</svg>
+
+<script>
+    function createBarChart(inputString) {
+        const bins = [
+            { name: "A-B", count: 0, min: 0, max: 0 },
+            { name: "C-D", count: 0, min: 0, max: 0 },
+            { name: "E-G", count: 0, min: 0, max: 0 },
+            { name: "H-J", count: 0, min: 0, max: 0 },
+            { name: "K-M", count: 0, min: 0, max: 0 },
+            { name: "N-P", count: 0, min: 0, max: 0 },
+            { name: "Q-S", count: 0, min: 0, max: 0 },
+            { name: "T-V", count: 0, min: 0, max: 0 },
+            { name: "W-X", count: 0, min: 0, max: 0 },
+            { name: "Y-Z", count: 0, min: 0, max: 0 },
+        ]
+
+        for (let i = 0; i < bins.length; i++) {
+            let charArray = bins[i].name.split("-");
+            bins[i].min = charArray[0].charCodeAt(0);
+            bins[i].max = charArray[1].charCodeAt(0);
+        }
+
+        inputString = inputString.toUpperCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+        for (let i = 0; i < inputString.length; i++) {
+            let codeAtNumber = inputString[i].charCodeAt(0);
+
+            let binItem = bins.find(x => x.min <= codeAtNumber && x.max >= codeAtNumber);
+            if (binItem) {
+                binItem.count++;
+            } else {
+                bins[bins.length - 1].count++; // Count in "Other" bin
+            }
+        }
+        const binWidth = 50;
+        const heightDefault = 100 / inputString.length;
+
+        const svgElement = d3.select('#Barchart')
+            .attr("viewBox", `0 0 ${bins.length * binWidth} 150`);
+
+        const rects = svgElement.selectAll("rect")
+            .data(bins)
+            .enter()
+            .append("rect")
+            .attr("x", (d, i) => i * binWidth)
+            .attr("y", d => 150 - d.count * heightDefault)
+            .attr("width", binWidth)
+            .attr("height", d => d.count * heightDefault)
+            .attr("fill", "blue")
+            .attr("stroke", "black");
+
+        // const line = svgElement.append("line")
+        //     .attr("x1", 0)
+        //     .attr("x2", bins.length * binWidth)
+        //     .attr("y1", 150)
+        //     .attr("y2", 150)
+        //     .attr("stroke", "black")
+        //     .attr("stroke-width", 5);
+    }
+
+    createBarChart("Thanh");
+</script>
