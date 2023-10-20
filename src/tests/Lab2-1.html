@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<title>Lab 1</title>
+<h3 style="color: red">  Phan Mạnh Sơn  </h3>
+<h4>  ITDSIU21116  </h4>
+<h4> Data Science and Data Visualization</h4>
+<h4 class = "italic"> Lab 2 - Introduction to D3.js </h4>
+<p> This is all my own work. I did not copy the code from any other source </p>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<svg id="histogram" width="300" height="400">
+    <!-- The histogram will be drawn here -->
+</svg>
+<script>
+    function createHistogram(inputString) {
+        const bins = [
+            { name: "A-D", count: 0, min: 0, max: 0 },
+            { name: "E-H", count: 0, min: 0, max: 0 },
+            { name: "I-L", count: 0, min: 0, max: 0 },
+            { name: "M-P", count: 0, min: 0, max: 0 },
+            { name: "Q-U", count: 0, min: 0, max: 0 },
+            { name: "V-Z", count: 0, min: 0, max: 0 },
+        ];
+
+        for (let i = 0; i < bins.length; i++) {
+            let charArray = bins[i].name.split("-");
+            bins[i].min = charArray[0].charCodeAt(0);
+            bins[i].max = charArray[1].charCodeAt(0);
+        }
+
+        inputString = inputString.toUpperCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+        // inputString ==> Nguyen
+        for (let i = 0; i < inputString.length; i++) {
+            // i = 0 ==> inputString[i] ==> N ==> 78
+
+            // codeAtNumber ==> 78
+            let codeAtNumber = inputString[i].charCodeAt(0);
+
+            //bins ==> .find(params) ==> params ==> true ==> ELement of bin
+            let binItem = bins.find(x => x.min <= codeAtNumber && x.max >= codeAtNumber);
+            binItem.count++;
+        }
+
+        const binWidth = 50;
+        const heightDefault = 100 / inputString.length;
+
+        let svgElement = $('#histogram');
+        svgElement.attr("viewBox", `0 0 ${bins.length * binWidth} 150`);
+
+        let htmlRect = ``;
+        for (let i = 0; i < bins.length; i++) {
+            const x = i * binWidth;
+            const height = bins[i].count * heightDefault;
+            const y = 150 - height;
+
+            htmlRect += `<rect x="${x}" y="${y}" width="${binWidth}" height="${height}" fill="blue" stroke="black"></rect>`;
+        }
+
+        let htmlLine = `<line x1="0" x2="${bins.length * binWidth}" y1="150" y2="150" stroke="black" stroke-width="5"></line>`;
+
+        svgElement.html(htmlRect + htmlLine);
+    }
+
+    createHistogram("Tung");
+</script>
+<svg id = 'b1' width="500" height="100"></svg>
+<script src="http://d3js.org/d3.v4.min.js" charset="utf-8"></script>
+<script src="Lab2-2.js"> </script>
+<svg id = 'b2' width="800" height="100"></svg>
+<script src="Lab2-3.js"> </script>
+</body>
+</html>
