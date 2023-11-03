@@ -1,0 +1,20 @@
+h3 {
+    color: red;
+}
+
+h4.bold {
+    font-weight: bold;
+}
+
+h4.italic {
+    font-weight: normal;
+    font-style: italic;
+
+}
+
+/*setting the title*/
+.chart-title {
+    text-align: center; /* Center the title horizontally */
+    margin-top: 20px; /* Add space at the top of the title */
+    margin-left: -500px; /* Add space at the left of the title */
+}
